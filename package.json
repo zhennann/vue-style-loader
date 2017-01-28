@@ -1,14 +1,11 @@
 {
-  "name": "style-loader",
-  "version": "0.13.1",
-  "author": "Tobias Koppers @sokra",
-  "description": "style loader module for webpack",
-  "devDependencies": {
-    "css-loader": "~0.8.0"
-  },
+  "name": "vue-style-loader",
+  "version": "1.0.0",
+  "author": "Evan You",
+  "description": "Vue.js style loader module for webpack",
   "repository": {
     "type": "git",
-    "url": "git@github.com:webpack/style-loader.git"
+    "url": "git@github.com:vuejs/vue-style-loader.git"
   },
   "license": "MIT",
   "dependencies": {
