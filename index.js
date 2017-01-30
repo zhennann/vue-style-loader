@@ -5,6 +5,7 @@
 */
 var loaderUtils = require('loader-utils')
 var path = require('path')
+var hash = require('hash-sum')
 
 module.exports = function () {}
 
@@ -13,10 +14,11 @@ module.exports.pitch = function (remainingRequest) {
 
   var isServer = this.options.target === 'node'
   var isProduction = this.minimize || process.env.NODE_ENV === 'production'
-  var addStylesClientPath = loaderUtils.stringifyRequest(this, '!' + path.join(__dirname, 'addStylesClient.js'))
-  var addStylesServerPath = loaderUtils.stringifyRequest(this, '!' + path.join(__dirname, 'addStylesServer.js'))
+  var addStylesClientPath = loaderUtils.stringifyRequest(this, '!' + path.join(__dirname, 'lib/addStylesClient.js'))
+  var addStylesServerPath = loaderUtils.stringifyRequest(this, '!' + path.join(__dirname, 'lib/addStylesServer.js'))
 
   var request = loaderUtils.stringifyRequest(this, '!!' + remainingRequest)
+  var id = JSON.stringify(hash(request))
 
   var shared = [
     '// style-loader: Adds some css to the DOM by adding a <style> tag',
@@ -32,7 +34,7 @@ module.exports.pitch = function (remainingRequest) {
 		// on the client: dynamic inject + hot-reload
     return shared.concat([
       '// add the styles to the DOM',
-      'var update = require(' + addStylesClientPath + ')(content, ' + isProduction + ');',
+      'var update = require(' + addStylesClientPath + ')(' + id + ', content, ' + isProduction + ');',
       '// Hot Module Replacement',
       'if(module.hot) {',
       '	// When the styles change, update the <style> tags',
@@ -51,7 +53,7 @@ module.exports.pitch = function (remainingRequest) {
 		// on the server: attach to Vue SSR context
     return shared.concat([
       '// add CSS to SSR context',
-      'require(' + addStylesServerPath + ')(content, ' + isProduction + ');'
+      'require(' + addStylesServerPath + ')(' + id + ', content, ' + isProduction + ');'
     ]).join('\n')
   }
 }
