@@ -5,9 +5,13 @@ module.exports = function (list, isProduction) {
 
     if (!styles) {
       styles = context._styles = {}
-      context.renderStyles = () => Object.keys(styles)
-        .map(id => renderStyleTag(styles[id]))
-        .join('\n')
+      Object.defineProperty(context, 'styles', {
+        get () {
+          return Object.keys(styles)
+            .map(id => renderStyleTag(styles[id]))
+            .join('\n')
+        }
+      })
     }
 
     list = listToStyles(list)
@@ -80,5 +84,5 @@ function addStyleDev (styles, list) {
 }
 
 function renderStyleTag (style) {
-  return `<style data-vue-ssr-id="${style.ids.join(' ')}" ${style.media ? `media=${style.mdia}` : ''}>${style.css}</style>`
+  return `<style data-vue-ssr-id="${style.ids.join(' ')}"${style.media ? ` media=${style.mdia}` : ''}>${style.css}</style>`
 }
