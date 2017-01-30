@@ -12,7 +12,7 @@ Since this is included as a dependency and used by default in `vue-loader`, in m
 
 - Does not support url mode and reference counting mode.
 
-- Removed `singleton` option. It always automatically pick the style insertion mechanism that makes most sense.
+- Removed `singleton` and `insertAt` query options. It always automatically pick the style insertion mechanism that makes most sense.
 
 ## License
 
