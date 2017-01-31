@@ -7,9 +7,15 @@
     "type": "git",
     "url": "git@github.com:vuejs/vue-style-loader.git"
   },
+  "scripts": {
+    "test": "jest"
+  },
   "license": "MIT",
   "dependencies": {
     "hash-sum": "^1.0.2",
     "loader-utils": "^0.2.7"
+  },
+  "devDependencies": {
+    "jest": "^18.1.0"
   }
 }
