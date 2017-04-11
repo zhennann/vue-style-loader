@@ -58,7 +58,10 @@ module.exports.pitch = function (remainingRequest) {
     // on the server: attach to Vue SSR context
     return shared.concat([
       '// add CSS to SSR context',
-      'require(' + addStylesServerPath + ')(' + id + ', content, ' + isProduction + ');'
+      'var add = require(' + addStylesServerPath + ')',
+      'module.exports.__inject__ = function () {',
+      '  add(' + id + ', content, ' + isProduction + ')',
+      '};'
     ]).join('\n')
   }
 }
