@@ -17,9 +17,13 @@ module.exports.pitch = function (remainingRequest) {
   var addStylesClientPath = loaderUtils.stringifyRequest(this, '!' + path.join(__dirname, 'lib/addStylesClient.js'))
   var addStylesServerPath = loaderUtils.stringifyRequest(this, '!' + path.join(__dirname, 'lib/addStylesServer.js'))
 
-  var isVue = /\.vue$/.test(remainingRequest)
   var request = loaderUtils.stringifyRequest(this, '!!' + remainingRequest)
   var id = JSON.stringify(hash(request))
+
+  // direct css import from js --> direct (how does this work when inside an async chunk? ...just don't do it)
+  // css import from vue file --> component lifecycle linked
+  // style embedded in vue file --> component lifecycle linked
+  var isVue = /"vue":true/.test(remainingRequest)
 
   var shared = [
     '// style-loader: Adds some css to the DOM by adding a <style> tag',
