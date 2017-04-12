@@ -59,8 +59,8 @@ module.exports.pitch = function (remainingRequest) {
     return shared.concat([
       '// add CSS to SSR context',
       'var add = require(' + addStylesServerPath + ')',
-      'module.exports.__inject__ = function () {',
-      '  add(' + id + ', content, ' + isProduction + ')',
+      'module.exports.__inject__ = function (context) {',
+      '  add(' + id + ', content, ' + isProduction + ', context)',
       '};'
     ]).join('\n')
   }
