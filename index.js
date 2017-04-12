@@ -17,6 +17,7 @@ module.exports.pitch = function (remainingRequest) {
   var addStylesClientPath = loaderUtils.stringifyRequest(this, '!' + path.join(__dirname, 'lib/addStylesClient.js'))
   var addStylesServerPath = loaderUtils.stringifyRequest(this, '!' + path.join(__dirname, 'lib/addStylesServer.js'))
 
+  var isVue = /\.vue$/.test(remainingRequest)
   var request = loaderUtils.stringifyRequest(this, '!!' + remainingRequest)
   var id = JSON.stringify(hash(request))
 
@@ -56,12 +57,21 @@ module.exports.pitch = function (remainingRequest) {
     return shared.concat(code).join('\n')
   } else {
     // on the server: attach to Vue SSR context
-    return shared.concat([
-      '// add CSS to SSR context',
-      'var add = require(' + addStylesServerPath + ')',
-      'module.exports.__inject__ = function (context) {',
-      '  add(' + id + ', content, ' + isProduction + ', context)',
-      '};'
-    ]).join('\n')
+    if (isVue) {
+      // inside *.vue file: expose a function so it can be called in
+      // component's lifecycle hooks
+      return shared.concat([
+        '// add CSS to SSR context',
+        'var add = require(' + addStylesServerPath + ')',
+        'module.exports.__inject__ = function (context) {',
+        '  add(' + id + ', content, ' + isProduction + ', context)',
+        '};'
+      ]).join('\n')
+    } else {
+      // normal import
+      return shared.concat([
+        'require(' + addStylesServerPath + ')(' + id + ', content, ' + isProduction + ')'
+      ]).join('\n')
+    }
   }
 }
