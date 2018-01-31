@@ -16,6 +16,7 @@ module.exports.pitch = function (remainingRequest) {
   var isProduction = this.minimize || process.env.NODE_ENV === 'production'
   var addStylesClientPath = loaderUtils.stringifyRequest(this, '!' + path.join(__dirname, 'lib/addStylesClient.js'))
   var addStylesServerPath = loaderUtils.stringifyRequest(this, '!' + path.join(__dirname, 'lib/addStylesServer.js'))
+  var addStylesShadowPath = loaderUtils.stringifyRequest(this, '!' + path.join(__dirname, 'lib/addStylesShadow.js'))
 
   var request = loaderUtils.stringifyRequest(this, '!!' + remainingRequest)
   var id = JSON.stringify(hash(request + path.relative(__dirname, this.resourcePath)))
@@ -36,7 +37,17 @@ module.exports.pitch = function (remainingRequest) {
     'if(content.locals) module.exports = content.locals;'
   ]
 
-  if (!isServer) {
+  // shadowMode is enabled in vue-cli with vue build --target web-component.
+  // exposes the same __inject__ method like SSR
+  if (options.shadowMode) {
+    return shared.concat([
+      '// add CSS to Shadow Root',
+      'var add = require(' + addStylesShadowPath + ').default',
+      'module.exports.__inject__ = function (shadowRoot) {',
+      '  add(' + id + ', content, shadowRoot)',
+      '};'
+    ]).join('\n')
+  } else if (!isServer) {
     // on the client: dynamic inject + hot-reload
     var code = [
       '// add the styles to the DOM',
