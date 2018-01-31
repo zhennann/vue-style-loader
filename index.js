@@ -40,7 +40,8 @@ module.exports.pitch = function (remainingRequest) {
     // on the client: dynamic inject + hot-reload
     var code = [
       '// add the styles to the DOM',
-      'var update = require(' + addStylesClientPath + ')(' + id + ', content, ' + isProduction + ', ' + JSON.stringify(options) + ');'
+      'var add = require(' + addStylesClientPath + ').default',
+      'var update = add(' + id + ', content, ' + isProduction + ', ' + JSON.stringify(options) + ');'
     ]
     if (!isProduction) {
       code = code.concat([
@@ -67,7 +68,7 @@ module.exports.pitch = function (remainingRequest) {
       // component's lifecycle hooks
       return shared.concat([
         '// add CSS to SSR context',
-        'var add = require(' + addStylesServerPath + ')',
+        'var add = require(' + addStylesServerPath + ').default',
         'module.exports.__inject__ = function (context) {',
         '  add(' + id + ', content, ' + isProduction + ', context)',
         '};'
