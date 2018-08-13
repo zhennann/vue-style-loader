@@ -1,3 +1,13 @@
+<a name="4.1.2"></a>
+## [4.1.2](https://github.com/vuejs/vue-style-loader/compare/v4.1.1...v4.1.2) (2018-08-13)
+
+
+### Bug Fixes
+
+* fix inconsistent hashes between Windows and POSIX systems ([#28](https://github.com/vuejs/vue-style-loader/issues/28)) ([cf8b6e8](https://github.com/vuejs/vue-style-loader/commit/cf8b6e8))
+
+
+
 <a name="4.1.1"></a>
 ## [4.1.1](https://github.com/vuejs/vue-style-loader/compare/v4.1.0...v4.1.1) (2018-07-17)
 
