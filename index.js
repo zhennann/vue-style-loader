@@ -68,6 +68,7 @@ module.exports.pitch = function (remainingRequest) {
         ' if(!content.locals) {',
         '   module.hot.accept(' + request + ', function() {',
         '     var newContent = require(' + request + ');',
+        '     if(newContent.__esModule) newContent = newContent.default;',
         "     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];",
         '     update(newContent);',
         '   });',
