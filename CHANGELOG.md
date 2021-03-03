@@ -1,3 +1,14 @@
+<a name="4.1.3"></a>
+## [4.1.3](https://github.com/vuejs/vue-style-loader/compare/v4.0.1...v4.1.3) (2021-03-03)
+
+
+### Bug Fixes
+
+* also support passed ES modules from `css-loader` in addition to CommonJS format ([#47](https://github.com/vuejs/vue-style-loader/issues/47)) ([8b584bd](https://github.com/vuejs/vue-style-loader/commit/8b584bd))
+* es module interop in HMR code ([8bc2fe3](https://github.com/vuejs/vue-style-loader/commit/8bc2fe3))
+
+
+
 <a name="4.1.2"></a>
 ## [4.1.2](https://github.com/vuejs/vue-style-loader/compare/v4.1.1...v4.1.2) (2018-08-13)
 
