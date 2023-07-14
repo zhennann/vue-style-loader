@@ -55,11 +55,12 @@ module.exports.pitch = function (remainingRequest) {
     ]).join('\n')
   } else if (!isServer) {
     // on the client: dynamic inject + hot-reload
-    var code = [
-      '// add the styles to the DOM',
-      'var add = require(' + addStylesClientPath + ').default',
-      'var update = add(' + id + ', content, ' + isProduction + ', ' + JSON.stringify(options) + ');'
-    ]
+    var code=[];
+    if(options.isGlobal){
+      code.push('// add the styles to the DOM');
+      code.push('if(!window.__vueStyleLoader_add) { window.__vueStyleLoader_add = require(' + addStylesClientPath + ').default }');
+    }
+    code.push('var update = window.__vueStyleLoader_add(' + id + ', content, ' + isProduction + ', ' + JSON.stringify(options) + ');');
     if (!isProduction) {
       code = code.concat([
         '// Hot Module Replacement',
